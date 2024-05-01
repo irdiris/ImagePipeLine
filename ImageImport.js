@@ -2,11 +2,20 @@ const fs = require('fs');
 const path = require('path');
 const ImageInfo = require("./Models/ImageInfo");
 const folderPath = 'TestImages';
+
+function cmToPixels(width, height) {
+  const ppi = 96;
+  const cmToInch = 2.54;
+
+  const widthInPixels = Math.round(width * ppi / cmToInch);
+  const heightInPixels = Math.round(height * ppi / cmToInch);
+
+  return { width: widthInPixels, height: heightInPixels };
+}
+
 function importImage() {
   return new Promise((resolve, reject) => {
     const imagesData = [];
-    let length = 0;
-    let width = 0;
 
     fs.readdir(folderPath, (err, files) => {
       if (err) {
@@ -26,22 +35,22 @@ function importImage() {
         // Extract length and width from the file name using regular expressions
         const fileNamePattern = /-(\d+)X(\d+)/;
         const match = imageFile.match(fileNamePattern);
-
+        let height, width;
 
         if (match) {
-          length = parseInt(match[1], 10);
-          width = parseInt(match[2], 10);
-
+          const { width: pixelWidth, height: pixelHeight } = cmToPixels(parseInt(match[1], 10), parseInt(match[2], 10));
+          height = pixelHeight;
+          width = pixelWidth;
         }
 
-        const imageInfo = new ImageInfo(imageFile, imageData, length, width);
+        const imageInfo = new ImageInfo(imageFile, imageData, height, width,0,0);
         imagesData.push(imageInfo);
       });
-
       resolve(imagesData);
     });
   });
 }
+
 module.exports = {
   importImage
 };

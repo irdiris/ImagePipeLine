@@ -1,9 +1,11 @@
 class ImageInfo {
-    constructor(fileName, imageData, length, width) {
+    constructor(fileName, imageData, height, width, position_X, position_Y) {
         this.fileName = fileName;
         this.imageData = imageData;
-        this.length = length;
+        this.height = height;
         this.width = width;
+        this.position_X = position_X;
+        this.position_Y = position_Y;
     }
 }
 module.exports = ImageInfo;
