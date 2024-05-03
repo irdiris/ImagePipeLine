@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
-const ImageInfo = require("./Models/ImageInfo");
-const folderPath = 'TestImages';
+const ImageInfo = require("./models/ImageInfo");
+const folderPath = 'input';
 
 function cmToPixels(width, height) {
   const ppi = 96;

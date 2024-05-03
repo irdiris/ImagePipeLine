@@ -1,5 +1,5 @@
 const pack = require('bin-pack');
-const Result = require("./Models/Result");
+const Result = require("./models/Result");
 function packImages(imagesData) {
     const bins = imagesData.map(imageInfo => ({
         width: imageInfo.width,
