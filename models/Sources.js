@@ -1,6 +1,6 @@
 class Source {
-    constructor(path, x, y) {
-        this.path = path;
+    constructor(src, x, y) {
+        this.src = src;
         this.x = x;
         this.y = y;
     }

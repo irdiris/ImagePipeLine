@@ -10,7 +10,6 @@ importImage()
     .then(imagesData => {
         const result = packImages(imagesData);
         return mergeImagesFromResult(result);
-
     })
     .then(r => {
         console.log("done");

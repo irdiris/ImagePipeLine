@@ -24,16 +24,17 @@ function processImages(imagesData) {
                     } else {
                         const resizedWidthPx = info.width;
                         const resizedHeightPx = info.height;
-                        console.log(`Resized image: ${resizedWidthPx} px x ${resizedHeightPx} px, saved to ${outputPath}`);
-
-                        imageInfo.path = outputPath;
+                        imageInfo.URL = outputPath;
                         resolve();
                     }
                 });
         });
     });
 
-    return Promise.all(promises).then(() => imagesData);
+    return Promise.all(promises).then(() => {
+        return imagesData;
+    });
+
 }
 
 module.exports = {

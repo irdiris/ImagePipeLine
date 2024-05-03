@@ -4,37 +4,43 @@ const { Canvas, Image } = require('canvas');
 
 const ImageInfo = require("./models/ImageInfo");
 const Source = require("./models/Sources");
+const path = require("path");
 
 async function mergeImagesFromResult(result, outputFilePath = 'output') {
    return new Promise(async (resolve, reject) => {
       try {
          const sources = result.imageInfos.map(imageInfo => {
-            console.log(imageInfo); // Log the imageInfo object for debugging
-            // Ensure that imageInfo.path is properly accessed and passed to the Source constructor
-            return new Source(imageInfo.path, imageInfo.position_X, imageInfo.position_Y);
+            return new Source(imageInfo.URL, imageInfo.position_X, imageInfo.position_Y);
          });
-         console.log('Sources:', sources);
+          console.log('Result:', result); // Log sources before mergeImages
+
+          console.log('Sources:', sources); // Log sources before mergeImages
 
          try {
-            const base64 = await mergeImages(sources, {
-               width: result.width,
-               height: result.height,
-               Canvas: Canvas,
-               Image: Image
-            });
-            console.log('Merge successful, base64:', base64);
+             mergeImages(sources,{
+                     width: 4914,
+                     height: 3780,
+                     Canvas: Canvas,
+                     Image: Image
+                 }
+             )
+                 .then(mergedImageData => {
+                     console.log('mergedImageData:', mergedImageData); // Log the merged image data
 
-            const buffer = Buffer.from(base64.split(',')[1], 'base64');
-            fs.writeFileSync(outputFilePath, buffer);
-
-            console.log('Images merged successfully!');
-            resolve(); // Resolve the Promise when the operation is successful
+                     const buffer = Buffer.from(mergedImageData.split(',')[1], 'base64');
+                     const outputFilePath = path.join(__dirname, "output", "merged_image.png"); // Construct the output file path
+                     fs.writeFileSync(outputFilePath, buffer);
+                     console.log('Images merged successfully!');
+                 })
+                 .catch(error => {
+                     console.error('Error:', error);
+                 });
          } catch (error) {
             console.error('Error in mergeImages:', error);
             reject(error);
          }
       } catch (error) {
-         console.error('Error merging images:', error);
+         console.error('Error generating sources:', error);
          reject(error); // Reject the Promise with the error
       }
    });
